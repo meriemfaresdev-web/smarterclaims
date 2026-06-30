@@ -16,13 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['id_user'] = $user['id'];
             $_SESSION['email_user'] = $user['email'];
             
-            if ($user['email'] === 'admin@chikaya.ma') {
-                $_SESSION['role'] = 'admin';
-                header("Location: admin.php");
-            } else {
-                $_SESSION['role'] = 'user';
-                header("Location: dashboard.php");
-            }
+            // التوجيه مباشرة لـ dashboard تماشياً مع قاعدة البيانات الحالية
+            header("Location: dashboard.php");
             exit();
         } else {
             $erreur = "البيانات المدخلة غير صحيحة! / Identifiants incorrects !";
@@ -34,20 +29,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تسجيل الدخول | SmarterClaims</title>
     <style>
         :root { --bg: #f8fafc; --text: #0f172a; --primary: #0ea5e9; --primary-hover: #0284c7; --nav-bg: #1e293b; --footer-bg: #0f172a; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; direction: rtl; }
         
-        nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; }
+        /* قفل الصفحة لضمان ثبات المارجين ومنع التحرك الأفقي */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; direction: rtl; }
+        
+        nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); width: 100%; }
+        .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; flex-shrink: 0; }
         .logo span { color: var(--primary); }
         .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { color: #cbd5e1; text-decoration: none; font-size: 15px; }
-        .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .nav-links a { color: #cbd5e1; text-decoration: none; font-size: 15px; white-space: nowrap; }
+        .btn-accent { background: var(--primary); color: white !important; padding: 8px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
         
-        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; width: 100%; }
         .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); width: 100%; max-width: 400px; box-sizing: border-box; border-top: 4px solid var(--nav-bg); }
         .brand { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 5px; }
         .brand span { color: #0ea5e9; }
@@ -61,7 +71,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .back-home { text-align: center; margin-top: 20px; font-size: 14px; color: #64748b; }
         .back-home a { color: #0ea5e9; text-decoration: none; font-weight: 600; }
         
-        footer { background: var(--footer-bg); color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; }
+        footer { background: var(--footer-bg); color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; width: 100%; box-sizing: border-box; }
+
+        /* Media Queries للشاشات المتوسطة والصغيرة */
+        @media (max-width: 768px) {
+            nav { 
+                flex-direction: column !important; 
+                gap: 15px; 
+                text-align: center; 
+                padding: 15px; 
+            }
+            .nav-links { 
+                flex-direction: column !important; 
+                width: 100%; 
+                gap: 12px; 
+                justify-content: center;
+            }
+            .nav-links a, .btn-accent, .lang-btn {
+                width: 100%;
+                text-align: center;
+                padding: 10px 0;
+            }
+            main { padding: 20px 15px; }
+            .login-card { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>

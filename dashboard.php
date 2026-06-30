@@ -56,26 +56,40 @@ $reclamations = $stmt->fetchAll();
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard - SmarterClaims</title>
     <style>
         :root { 
             --bg: #f8fafc; --text: #0f172a; --primary: #0ea5e9; --primary-hover: #0284c7; 
             --nav-bg: #1e293b; --footer-bg: #0f172a; 
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); direction: rtl; display: flex; flex-direction: column; min-height: 100vh; }
         
-        nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; }
+        /* قفل الصفحة لمنع أي تحرك أفقي أو خروج عن المارجين */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); direction: rtl; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; width: 100%; }
+        .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; flex-shrink: 0; }
         .logo span { color: var(--primary); }
         .nav-links { display: flex; gap: 20px; align-items: center; color: white; }
-        .btn-logout { background: #ef4444; color: white !important; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .btn-logout { background: #ef4444; color: white !important; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; white-space: nowrap; }
         .btn-logout:hover { background: #b91c1c; }
         .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
 
-        .api-status { background: #e2e8f0; padding: 12px 50px; font-weight: bold; font-size: 14px; color: #334155; border-bottom: 1px solid #cbd5e1; }
+        .api-status { background: #e2e8f0; padding: 12px 50px; font-weight: bold; font-size: 14px; color: #334155; border-bottom: 1px solid #cbd5e1; width: 100%; box-sizing: border-box; }
 
-        main { flex: 1; max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; gap: 30px; width: 100%; box-sizing: border-box; }
+        main { flex: 1; max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; gap: 30px; width: 100%; }
         .form-section { width: 40%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border-top: 4px solid var(--primary); height: fit-content; }
         .list-section { width: 60%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border-top: 4px solid var(--nav-bg); }
         
@@ -87,22 +101,24 @@ $reclamations = $stmt->fetchAll();
         .btn-add { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-add:hover { background: var(--primary-hover); }
         
-        table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 15px; }
+        /* حاوية لمنع الجدول من تخريب المارجين */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 15px; min-width: 500px; }
         th, td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         th { background: #f8fafc; color: #64748b; font-weight: 600; }
         
-        .btn-action { padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold; color: white; display: inline-block; }
+        .btn-action { padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold; color: white; display: inline-block; white-space: nowrap; }
         .btn-edit { background: #f59e0b; margin-left: 5px; }
         .btn-edit:hover { background: #d97706; }
         .btn-delete { background: #ef4444; }
         .btn-delete:hover { background: #dc2626; }
-        .btn-view { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
+        .btn-view { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; white-space: nowrap; }
 
         .alert { padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; text-align: center; font-weight: 500; }
         .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
         .alert-danger { background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; }
         
-        footer { background: var(--footer-bg); color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; margin-top: auto; }
+        footer { background: var(--footer-bg); color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; margin-top: auto; width: 100%; box-sizing: border-box; }
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: white; padding: 20px; border-radius: 12px; max-width: 800px; width: 100%; height: 80vh; display: flex; flex-direction: column; position: relative; }
@@ -111,6 +127,39 @@ $reclamations = $stmt->fetchAll();
         .close-modal { background: #ef4444; color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .modal-body { flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #f1f5f9; border-radius: 6px; }
         .modal-body iframe, .modal-body img { width: 100%; height: 100%; object-fit: contain; border: none; }
+
+        /* Media Queries للتجاوب الكامل مع الهواتف */
+        @media (max-width: 768px) {
+            nav { 
+                flex-direction: column !important; 
+                gap: 15px; 
+                text-align: center; 
+                padding: 15px; 
+            }
+            .nav-links { 
+                flex-direction: column !important; 
+                width: 100%; 
+                gap: 12px; 
+                justify-content: center;
+            }
+            .nav-links span, .btn-logout, .lang-btn {
+                width: 100%;
+                text-align: center;
+                padding: 5px 0;
+            }
+            .api-status { padding: 10px 15px; text-align: center; }
+            
+            main { 
+                flex-direction: column; 
+                padding: 0 15px; 
+                margin: 15px auto;
+                gap: 20px;
+            }
+            .form-section, .list-section { 
+                width: 100%; 
+                padding: 20px 15px; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -118,7 +167,7 @@ $reclamations = $stmt->fetchAll();
     <nav>
         <a href="index.php" class="logo">Smarter<span>Claims</span></a>
         <div class="nav-links">
-            <span id="welcomeTxt"><span id="welcomeTxt">مرحباً: <?= htmlspecialchars($_SESSION['email_user']) ?></span></span>
+            <span id="welcomeTxt">مرحباً: <?= htmlspecialchars($_SESSION['email_user']) ?></span>
             <button class="lang-btn" onclick="switchLanguage()" id="langBtn">Français</button>
             <a href="logout.php" class="btn-logout" id="btnLogout">تسجيل الخروج</a>
         </div>
@@ -154,37 +203,39 @@ $reclamations = $stmt->fetchAll();
 
         <div class="list-section">
             <h3 id="listTitle">الشكايات الخاصة بي</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th id="thT" style="text-align: inherit;">العنوان</th>
-                        <th id="thD" style="text-align: inherit;">الوصف</th>
-                        <th id="thF" style="text-align: inherit;">الملف المرفق</th>
-                        <th id="thA" style="text-align: inherit;">الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (count($reclamations) > 0): ?>
-                        <?php foreach ($reclamations as $reclam): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($reclam['titre']) ?></td>
-                                <td><?= htmlspecialchars($reclam['description']) ?></td>
-                                <td>
-                                    <span class="btn-view btnViewLang" onclick="openFileModal('uploads/<?= $reclam['fichier_joint'] ?>')">عرض الملف</span>
-                                </td>
-                                <td>
-                                    <a href="modifier.php?id=<?= $reclam['id'] ?>" class="btn-action btn-edit btnEditLang">تعديل</a>
-                                    <a href="supprimer.php?id=<?= $reclam['id'] ?>" class="btn-action btn-delete btnDelLang" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
+            <div class="table-responsive">
+                <table>
+                    <thead>
                         <tr>
-                            <td colspan="4" style="text-align:center;" id="noClaims">لا توجد أي شكايات حالياً.</td>
+                            <th id="thT" style="text-align: inherit;">العنوان</th>
+                            <th id="thD" style="text-align: inherit;">الوصف</th>
+                            <th id="thF" style="text-align: inherit;">الملف المرفق</th>
+                            <th id="thA" style="text-align: inherit;">الإجراءات</th>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php if (count($reclamations) > 0): ?>
+                            <?php foreach ($reclamations as $reclam): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($reclam['titre']) ?></td>
+                                    <td><?= htmlspecialchars($reclam['description']) ?></td>
+                                    <td>
+                                        <span class="btn-view btnViewLang" onclick="openFileModal('uploads/<?= $reclam['fichier_joint'] ?>')">عرض الملف</span>
+                                    </td>
+                                    <td>
+                                        <a href="modifier.php?id=<?= $reclam['id'] ?>" class="btn-action btn-edit btnEditLang">تعديل</a>
+                                        <a href="supprimer.php?id=<?= $reclam['id'] ?>" class="btn-action btn-delete btnDelLang" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="4" style="text-align:center;" id="noClaims">لا توجد أي شكايات حالياً.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -195,9 +246,9 @@ $reclamations = $stmt->fetchAll();
                 <button class="close-modal" onclick="closeFileModal()" id="btnCloseModal">إغلاق المعاينة</button>
             </div>
             <div class="modal-body" id="modalBody">
-                </div>
+            </div>
         </div>
-    </div >
+    </div>
 
     <footer>
         <p id="footerText">© 2026 منصة SmarterClaims الرقمية. جميع الحقوق محفوظة.</p>
@@ -231,7 +282,7 @@ $reclamations = $stmt->fetchAll();
             if (lang === 'ar') {
                 body.style.direction = 'ltr';
                 document.getElementById('langBtn').innerText = 'العربية';
-                document.getElementById('welcomeTxt').innerText = 'Welcome  <?= htmlspecialchars($_SESSION['email_user']) ?>';
+                document.getElementById('welcomeTxt').innerText = 'Welcome: <?= htmlspecialchars($_SESSION['email_user']) ?>';
                 document.getElementById('btnLogout').innerText = 'Logout';
                 document.getElementById('formTitle').innerText = 'Add a New Claim';
                 document.getElementById('lblTitle').innerText = 'Title :';
@@ -263,7 +314,7 @@ $reclamations = $stmt->fetchAll();
             } else {
                 body.style.direction = 'rtl';
                 document.getElementById('langBtn').innerText = 'Français';
-                document.getElementById('welcomeTxt').innerText = 'مرحباً بك في لوحة التحكم';
+                document.getElementById('welcomeTxt').innerText = 'مرحباً: <?= htmlspecialchars($_SESSION['email_user']) ?>';
                 document.getElementById('btnLogout').innerText = 'تسجيل الخروج';
                 document.getElementById('formTitle').innerText = 'إضافة شكاية جديدة';
                 document.getElementById('lblTitle').innerText = 'العنوان :';
