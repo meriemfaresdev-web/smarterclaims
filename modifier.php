@@ -1,11 +1,9 @@
 <?php
-// modifier.php
 session_start();
 if (!isset($_SESSION['id_user'])) { header("Location: login.php"); exit(); }
 
 require_once 'db.php';
 
-// جلب البيانات القديمة لعرضها في الفورم
 if (isset($_GET['id'])) {
     $stmt = $pdo->prepare("SELECT * FROM reclamations WHERE id = ? AND id_utilisateur = ?");
     $stmt->execute([$_GET['id'], $_SESSION['id_user']]);
@@ -13,13 +11,11 @@ if (isset($_GET['id'])) {
     if (!$reclam) { die("Réclamation introuvable !"); }
 }
 
-// معالجة التعديل فاش يضغط على Modifier
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_reclam'])) {
     $id_reclam = $_POST['id_reclam'];
     $titre = $_POST['titre'];
     $description = $_POST['description'];
 
-    // تطبيق التعديل
     $stmt = $pdo->prepare("UPDATE reclamations SET titre = ?, description = ? WHERE id = ? AND id_utilisateur = ?");
     $stmt->execute([$titre, $description, $id_reclam, $_SESSION['id_user']]);
 
@@ -40,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_reclam'])) {
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); direction: rtl; display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
         
-        /* Navbar الموحد */
         nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; text-decoration: none; }
         .logo span { color: var(--primary); }
@@ -50,14 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_reclam'])) {
         .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.3s; }
         .lang-btn:hover { background: rgba(255,255,255,0.2); }
 
-        /* Container الرئيسي */
         .main-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
         
-        /* صندوق تعديل الشكاية الاحترافي */
         .box { background: var(--card-bg); padding: 40px; border-radius: 16px; max-width: 550px; width: 100%; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.05); border: 1px solid var(--border); box-sizing: border-box; }
         .box h3 { font-size: 24px; font-weight: 800; color: #1e293b; margin: 0 0 25px 0; text-align: center; }
         
-        /* تنسيق عناصر الفورم */
         form { display: flex; flex-direction: column; gap: 20px; }
         label { font-size: 14px; font-weight: 600; color: #475569; }
         
@@ -71,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['modifier_reclam'])) {
             box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15); 
         }
         
-        /* أزرار التحكم */
         .btn-group { display: flex; align-items: center; gap: 15px; margin-top: 10px; }
         .btn-save { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(14,165,233,0.2); flex: 1; }
         .btn-save:hover { background: var(--primary-hover); transform: translateY(-1px); }

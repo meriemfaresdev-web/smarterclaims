@@ -1,5 +1,4 @@
 <?php
-// login.php
 require_once 'db.php';
 session_start();
 $erreur = "";
@@ -41,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         :root { --bg: #f8fafc; --text: #0f172a; --primary: #0ea5e9; --primary-hover: #0284c7; --nav-bg: #1e293b; --footer-bg: #0f172a; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); display: flex; flex-direction: column; min-height: 100vh; direction: rtl; }
         
-        /* Navbar */
         nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; }
         .logo span { color: var(--primary); }
@@ -49,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .nav-links a { color: #cbd5e1; text-decoration: none; font-size: 15px; }
         .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         
-        /* Main Container */
         main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
         .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); width: 100%; max-width: 400px; box-sizing: border-box; border-top: 4px solid var(--nav-bg); }
         .brand { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 5px; }

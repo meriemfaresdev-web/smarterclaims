@@ -1,5 +1,4 @@
 <?php
-// index.php
 session_start();
 ?>
 <!DOCTYPE html>
@@ -15,7 +14,6 @@ session_start();
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); direction: rtl; display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s ease; }
         
-        /* Navbar الموحد */
         nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px; text-decoration: none; }
         .logo span { color: var(--primary); }
@@ -27,17 +25,15 @@ session_start();
         .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.3s; }
         .lang-btn:hover { background: rgba(255,255,255,0.2); }
 
-        /* 🌌 الـ Hero Section المطور كخلفية كاملة للسايت */
         .hero-banner { 
             position: relative;
-            background-image: url('image.png'); /* اسم الصورة المرفقة */
+            background-image: url('image.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             padding: 100px 0;
             margin-bottom: 60px;
         }
-        /* غطاء شفاف داكن ليعطي تباين خيالي للكتابة */
         .hero-banner::before {
             content: '';
             position: absolute;
@@ -46,7 +42,6 @@ session_start();
             z-index: 1;
         }
 
-        /* محتوى الـ Hero فوق الخلفية */
         .hero-container {
             position: relative;
             z-index: 2;
@@ -61,22 +56,18 @@ session_start();
         .hero-text h1 span { color: var(--primary); }
         .hero-text p { font-size: 20px; color: #e2e8f0; line-height: 1.8; margin-bottom: 35px; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         
-        /* أزرار متباينة مع الخلفية الداكنة */
         .cta-group { display: flex; gap: 15px; }
         .btn-main { background: var(--primary); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4); transition: 0.3s; }
         .btn-main:hover { background: var(--primary-hover); transform: translateY(-2px); }
         .btn-sec { background: rgba(255, 255, 255, 0.15); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(5px); transition: 0.3s; }
         .btn-sec:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
 
-        /* باقي عناصر الصفحة الموحدة */
         .content-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; box-sizing: border-box; }
 
-        /* 📊 قسم الإحصائيات (Stats Section) */
         .stats-section { display: flex; justify-content: space-around; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 60px; text-align: center; }
         .stat-card h3 { font-size: 36px; color: var(--primary); margin: 0 0 5px 0; font-weight: 800; }
         .stat-card p { font-size: 15px; color: #64748b; margin: 0; font-weight: 500; }
 
-        /* ✨ قسم المميزات الذكية (Features Section) */
         .section-title { text-align: center; font-size: 28px; font-weight: 800; color: #1e293b; margin-bottom: 40px; }
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
         .feature-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.01); border-bottom: 3px solid transparent; transition: 0.3s; }
@@ -85,7 +76,6 @@ session_start();
         .feature-card h4 { font-size: 18px; font-weight: 700; margin: 0 0 10px 0; color: #1e293b; }
         .feature-card p { font-size: 14px; color: #64748b; margin: 0; line-height: 1.6; }
 
-        /* 🚶‍♂️ قسم طريقة العمل (How it works) */
         .steps-section { padding: 60px 0; background: rgba(14, 165, 233, 0.03); border-radius: 20px; margin-bottom: 80px; }
         .steps-grid { display: flex; justify-content: space-around; gap: 30px; padding: 0 40px; }
         .step-card { flex: 1; text-align: center; position: relative; }
@@ -93,7 +83,6 @@ session_start();
         .step-card h4 { font-size: 18px; margin: 0 0 10px 0; color: #1e293b; }
         .step-card p { font-size: 14px; color: #64748b; margin: 0; line-height: 1.6; }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .hero-text h1 { font-size: 36px; }
             .hero-text p { font-size: 16px; }
@@ -101,7 +90,6 @@ session_start();
             .stats-section, .steps-grid { flex-direction: column; gap: 30px; padding: 20px; }
         }
 
-        /* Footer الموحد */
         footer { background: var(--footer-bg); color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; border-top: 1px solid #1e293b; margin-top: auto; }
     </style>
 </head>

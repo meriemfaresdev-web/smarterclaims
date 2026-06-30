@@ -1,8 +1,7 @@
 <?php
-// حطي القيم الحقيقية اللي نقلتيها من Railway ديريكت هنا:
 $host   = 'mysql.railway.internal'; 
 $port   = '3306';                  
-$dbname = 'railway';                // تأكدي غي واش سميتها railway ف السيرفر أو سمية أخرى
+$dbname = 'railway';               
 $user   = 'root';                  
 $pass   = 'KHSoFOeqdqdYdpXFvzGXqFKwTyWRNSSV'; 
 

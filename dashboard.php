@@ -1,7 +1,5 @@
 <?php
-// dashboard.php
 session_start();
-// التأكد من الأمان (الـ 4 أسطر المطلوبة فالسؤال 4)
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit();
@@ -9,25 +7,20 @@ if (!isset($_SESSION['id_user'])) {
 
 require_once 'db.php';
 
-// --- 1. استهلاك الـ REST API (السؤال 12) ---
 $api_url = "https://api.entreprise.com/status";
-// استعملنا @ لتفادي ظهور خطأ إن كان السيرفر الخارجي غير موجود ووضعنا فرضية افتراضية للـ Test
 $response = @file_get_contents($api_url);
 if ($response !== false) {
     $api_data = json_decode($response, true);
     $status_text = "Serveur : " . $api_data['statut'] . " (" . $api_data['actifs'] . " utilisateurs)";
 } else {
-    // حالة احتياطية للاختبار فقط إذا كان الرابط الوهمي لا يعمل
     $status_text = "Serveur : En ligne (120 utilisateurs) [Simulation]";
 }
 
-// --- 2. معالجة إضافة شكاية جديدة (Create + Upload) ---
 $message = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajouter_reclam'])) {
     $titre = $_POST['titre'];
     $description = $_POST['description'];
     
-    // تدبير الملف (السؤال 10)
     $file = $_FILES['fichier_joint'];
     $nom_fichier = $file['name'];
     $tmp_name = $file['tmp_name'];
@@ -37,11 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajouter_reclam'])) {
         $extensions_autorisees = ['pdf', 'jpg'];
         
         if (in_array($extension, $extensions_autorisees)) {
-            // نغير اسم الملف قليلاً لتفادي التكرار
             $nouveau_nom = time() . "_" . $nom_fichier;
             
             if (move_uploaded_file($tmp_name, "uploads/" . $nouveau_nom)) {
-                // إدخال البيانات (السؤال 6)
                 $stmt = $pdo->prepare("INSERT INTO reclamations (titre, description, fichier_joint, id_utilisateur) VALUES (?, ?, ?, ?)");
                 $stmt->execute([$titre, $description, $nouveau_nom, $_SESSION['id_user']]);
                 $message = "<div class='alert alert-success' id='msgSucces'>تمت إضافة الشكاية بنجاح! / Réclamation ajoutée avec succès !</div>";
@@ -56,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajouter_reclam'])) {
     }
 }
 
-// --- 3. جلب شكايات المستخدم الحالي فقط (Read - السؤال 7) ---
 $stmt = $pdo->prepare("SELECT * FROM reclamations WHERE id_utilisateur = ? ORDER BY id DESC");
 $stmt->execute([$_SESSION['id_user']]);
 $reclamations = $stmt->fetchAll();
@@ -75,7 +65,6 @@ $reclamations = $stmt->fetchAll();
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); direction: rtl; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Navbar الموحد */
         nav { background: var(--nav-bg); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 22px; font-weight: 800; color: white; text-decoration: none; }
         .logo span { color: var(--primary); }
@@ -84,10 +73,8 @@ $reclamations = $stmt->fetchAll();
         .btn-logout:hover { background: #b91c1c; }
         .lang-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
 
-        /* API Status Bar */
         .api-status { background: #e2e8f0; padding: 12px 50px; font-weight: bold; font-size: 14px; color: #334155; border-bottom: 1px solid #cbd5e1; }
 
-        /* Main Container */
         main { flex: 1; max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; gap: 30px; width: 100%; box-sizing: border-box; }
         .form-section { width: 40%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border-top: 4px solid var(--primary); height: fit-content; }
         .list-section { width: 60%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border-top: 4px solid var(--nav-bg); }
@@ -100,12 +87,10 @@ $reclamations = $stmt->fetchAll();
         .btn-add { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-add:hover { background: var(--primary-hover); }
         
-        /* Table Styling */
         table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 15px; }
         th, td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         th { background: #f8fafc; color: #64748b; font-weight: 600; }
         
-        /* Action Buttons */
         .btn-action { padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold; color: white; display: inline-block; }
         .btn-edit { background: #f59e0b; margin-left: 5px; }
         .btn-edit:hover { background: #d97706; }
@@ -117,10 +102,8 @@ $reclamations = $stmt->fetchAll();
         .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
         .alert-danger { background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; }
         
-        /* Footer */
         footer { background: var(--footer-bg); color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; margin-top: auto; }
 
-        /* --- نافذة عرض الملف الاحترافية (Modal) --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: white; padding: 20px; border-radius: 12px; max-width: 800px; width: 100%; height: 80vh; display: flex; flex-direction: column; position: relative; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
@@ -221,7 +204,6 @@ $reclamations = $stmt->fetchAll();
     </footer>
 
     <script>
-        // دالة فتح نافذة عرض الملفات الاحترافية
         function openFileModal(fileUrl) {
             const modal = document.getElementById('fileModal');
             const modalBody = document.getElementById('modalBody');
@@ -235,13 +217,11 @@ $reclamations = $stmt->fetchAll();
             modal.style.display = 'flex';
         }
 
-        // دالة إغلاق النافذة والرجوع للوحة التحكم فوراً
         function closeFileModal() {
             document.getElementById('fileModal').style.display = 'none';
             document.getElementById('modalBody').innerHTML = '';
         }
 
-        // نظام تحويل اللغات الكامل الديناميكي للواجهة
         let lang = 'ar';
         function switchLanguage() {
             const body = document.body;
@@ -276,7 +256,6 @@ $reclamations = $stmt->fetchAll();
                 document.getElementById('btnCloseModal').innerText = 'Close Preview';
                 document.getElementById('footerText').innerText = '© 2026 SmarterClaims Digital Platform. All rights reserved.';
                 
-                // تعديل اتجاه نصوص الجدول لتتطابق مع الـ LTR
                 tableThs.forEach(th => th.style.textAlign = 'left');
                 tableTds.forEach(td => td.style.textAlign = 'left');
                 
@@ -309,7 +288,6 @@ $reclamations = $stmt->fetchAll();
                 document.getElementById('btnCloseModal').innerText = 'إغلاق المعاينة';
                 document.getElementById('footerText').innerText = '© 2026 منصة SmarterClaims الرقمية. جميع الحقوق محفوظة.';
                 
-                // إعادة اتجاه نصوص الجدول لتتطابق مع الـ RTL
                 tableThs.forEach(th => th.style.textAlign = 'right');
                 tableTds.forEach(td => td.style.textAlign = 'right');
                 

@@ -1,7 +1,6 @@
 <?php
-// logout.php
 session_start();
-session_destroy(); // تدمير السيسيون بالكامل
-header("Location: index.php"); // التوجيه لصفحة الـ Login
+session_destroy(); 
+header("Location: index.php"); 
 exit();
 ?>
