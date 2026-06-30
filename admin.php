@@ -1,18 +1,16 @@
 <?php
-// admin.php
 session_start();
-if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'admin') {
+
+if (!isset($_SESSION['id_user']) || $_SESSION['email_user'] !== 'admin@smarterclaims.com') {
     header("Location: login.php");
     exit();
 }
 
 require_once 'db.php';
 
-// جلب جميع الشكايات مع بيانات أصحابها
 $stmt = $pdo->query("SELECT reclamations.*, utilisateurs.email FROM reclamations JOIN utilisateurs ON reclamations.id_utilisateur = utilisateurs.id ORDER BY reclamations.id DESC");
 $all_claims = $stmt->fetchAll();
 
-// جلب بيانات ملف historique.txt لعرض المحذوفات
 $log_content = "";
 if (file_exists("historique.txt")) {
     $log_content = file_get_contents("historique.txt");
