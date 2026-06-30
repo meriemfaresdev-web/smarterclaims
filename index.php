@@ -152,6 +152,7 @@ session_start();
             <a href="login.php" id="navTrack">تتبع شكاية</a>
             <a href="register.php" class="btn-accent" id="navSubmit">تقديم شكاية</a>
             <button class="lang-btn" onclick="switchLanguage()" id="langBtn">Français</button>
+            <a href="login_admin.php" style="text-decoration: none; font-size: 20px; margin-right: 15px;" title="بوابة المشرف">👤</a>
         </div>
     </nav>
 

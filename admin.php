@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['id_user']) || $_SESSION['email_user'] !== 'admin@smarterclaims.com') {
-    header("Location: login.php");
+if (!isset($_SESSION['admin_logged']) || $_SESSION['admin_logged'] !== true) {
+    header("Location: login_admin.php");
     exit();
 }
 
