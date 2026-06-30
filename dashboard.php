@@ -7,26 +7,14 @@ if (!isset($_SESSION['id_user'])) {
 
 require_once 'db.php';
 
-
-$url = "https://api.entreprise.com/status";
-
-$response = @file_get_contents($url);
-
-if ($response === FALSE) {
-    $data = [
-        "statut" => "En ligne",
-        "actifs" => 120
-    ];
+$api_url = "https://api.entreprise.com/status";
+$response = @file_get_contents($api_url);
+if ($response !== false) {
+    $api_data = json_decode($response, true);
+    $status_text = "Serveur : " . $api_data['statut'] . " (" . $api_data['actifs'] . " utilisateurs)";
 } else {
-    $data = json_decode($response, true);
+    $status_text = "Serveur : En ligne (120 utilisateurs) [Simulation]";
 }
-
-if (isset($data['statut']) && isset($data['actifs'])) {
-    echo "Serveur : " . $data['statut'] . " (" . $data['actifs'] . " utilisateurs)";
-} else {
-    echo "Serveur : Indisponible";
-}
-
 
 $message = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajouter_reclam'])) {
